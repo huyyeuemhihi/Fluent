@@ -14,9 +14,6 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
 local Themes = {
 	Names = {
-		"Emerald Night",
-		"Violet Glass",
-		"Frost Dark",
 		"Midnight Blue",
 		"Amethyst Maru",
 		"Crimson Dark",
@@ -32,7 +29,10 @@ local Themes = {
 		"Amethyst",
 		"Amethyst Dark",
 		"Rose",
-		"Sakura"
+		"Sakura",
+		"Obsidian",
+		"Emerald Night",
+		"Violet Glass"
 	},
 	["VSC Dark High Contrast"] = {
 		Accent = Color3.fromHex("#569cd6"), -- Based on keyword color
@@ -126,55 +126,56 @@ local Themes = {
 		Hover = Color3.fromRGB(149, 149, 149),
 		HoverChange = 0.04
 	},
-	["Frost Dark"] = {
-	    Name = "Frost Dark",
-	    Accent = Color3.fromRGB(90, 180, 255),
+	["Obsidian"] = {
+	    Name = "Obsidian",
+	    Accent = Color3.fromRGB(255, 255, 255),
 	
-	    AcrylicMain = Color3.fromRGB(20, 22, 28),
-	    AcrylicBorder = Color3.fromRGB(72, 82, 95),
+	    AcrylicMain = Color3.fromRGB(10, 10, 10),
+	    AcrylicBorder = Color3.fromRGB(235, 235, 235),
 	    AcrylicGradient = ColorSequence.new(
-	        Color3.fromRGB(24, 26, 32),
-	        Color3.fromRGB(24, 26, 32)
+	        Color3.fromRGB(12, 12, 12),
+	        Color3.fromRGB(12, 12, 12)
 	    ),
-	    AcrylicNoise = 0.95,
+	    AcrylicNoise = 0.96,
 	
-	    TitleBarLine = Color3.fromRGB(72, 82, 95),
-	    Tab = Color3.fromRGB(170, 175, 185),
+	    TitleBarLine = Color3.fromRGB(235, 235, 235),
+	    Tab = Color3.fromRGB(205, 205, 205),
 	
-	    Element = Color3.fromRGB(34, 37, 44),
-	    ElementBorder = Color3.fromRGB(82, 92, 105),
-	    InElementBorder = Color3.fromRGB(105, 118, 132),
+	    Element = Color3.fromRGB(22, 22, 22),
+	    ElementBorder = Color3.fromRGB(245, 245, 245),
+	    InElementBorder = Color3.fromRGB(255, 255, 255),
 	    ElementTransparency = 0.08,
 	
-	    ToggleSlider = Color3.fromRGB(90, 180, 255),
-	    ToggleToggled = Color3.fromRGB(22, 24, 30),
+	    ToggleSlider = Color3.fromRGB(255, 255, 255),
+	    ToggleToggled = Color3.fromRGB(15, 15, 15),
 	
-	    SliderRail = Color3.fromRGB(82, 92, 105),
+	    SliderRail = Color3.fromRGB(245, 245, 245),
 	
-	    DropdownFrame = Color3.fromRGB(28, 31, 38),
-	    DropdownHolder = Color3.fromRGB(24, 27, 34),
-	    DropdownBorder = Color3.fromRGB(72, 82, 95),
-	    DropdownOption = Color3.fromRGB(185, 190, 198),
+	    DropdownFrame = Color3.fromRGB(18, 18, 18),
+	    DropdownHolder = Color3.fromRGB(14, 14, 14),
+	    DropdownBorder = Color3.fromRGB(245, 245, 245),
+	    DropdownOption = Color3.fromRGB(220, 220, 220),
 	
-	    Keybind = Color3.fromRGB(28, 31, 38),
+	    Keybind = Color3.fromRGB(18, 18, 18),
 	
-	    Input = Color3.fromRGB(24, 27, 34),
-	    InputFocused = Color3.fromRGB(32, 36, 44),
-	    InputIndicator = Color3.fromRGB(90, 180, 255),
-	    InputIndicatorFocus = Color3.fromRGB(120, 200, 255),
+	    Input = Color3.fromRGB(14, 14, 14),
+	    InputFocused = Color3.fromRGB(24, 24, 24),
+	    InputIndicator = Color3.fromRGB(255, 255, 255),
+	    InputIndicatorFocus = Color3.fromRGB(255, 255, 255),
 	
-	    Dialog = Color3.fromRGB(30, 33, 40),
-	    DialogHolder = Color3.fromRGB(24, 27, 34),
-	    DialogHolderLine = Color3.fromRGB(72, 82, 95),
-	    DialogButton = Color3.fromRGB(30, 33, 40),
-	    DialogButtonBorder = Color3.fromRGB(72, 82, 95),
-	    DialogBorder = Color3.fromRGB(72, 82, 95),
-	    DialogInput = Color3.fromRGB(24, 27, 34),
-	    DialogInputLine = Color3.fromRGB(90, 180, 255),
+	    Dialog = Color3.fromRGB(18, 18, 18),
+	    DialogHolder = Color3.fromRGB(14, 14, 14),
+	    DialogHolderLine = Color3.fromRGB(245, 245, 245),
+	    DialogButton = Color3.fromRGB(18, 18, 18),
+	    DialogButtonBorder = Color3.fromRGB(245, 245, 245),
+	    DialogBorder = Color3.fromRGB(245, 245, 245),
+	    DialogInput = Color3.fromRGB(14, 14, 14),
+	    DialogInputLine = Color3.fromRGB(255, 255, 255),
 	
-	    Text = Color3.fromRGB(225, 230, 240),
-	    SubText = Color3.fromRGB(150, 160, 170),
-	    Hover = Color3.fromRGB(45, 50, 60),
+	    Text = Color3.fromRGB(255, 255, 255),
+	    SubText = Color3.fromRGB(170, 170, 170),
+	
+	    Hover = Color3.fromRGB(35, 35, 35),
 	    HoverChange = 0.05,
 	},
 	["Emerald Night"] = {
