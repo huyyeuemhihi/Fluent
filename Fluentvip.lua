@@ -2945,7 +2945,7 @@ Components.TitleBar = function(Config)
 	}, {
 		-- ── Logo (20×20, vertically centered, left) ──────────
 		New("ImageLabel", {
-			Image            = "rbxassetid://9681970193",
+			Image            = "rbxassetid://122336319739368",
 			Size             = UDim2.fromOffset(20, 20),
 			AnchorPoint      = Vector2.new(0, 0.5),
 			Position         = UDim2.new(0, 14, 0.5, 0),    -- 14px from left, vcenter
@@ -3017,7 +3017,7 @@ Components.TitleBar = function(Config)
 
 	-- logo
 	New("ImageLabel", {
-		Image            = "rbxassetid://9681970193",
+		Image            = "rbxassetid://122336319739368",
 		Size             = UDim2.fromOffset(20, 20),
 		AnchorPoint      = Vector2.new(0, 0.5),
 		Position         = UDim2.new(0, 14, 0.5, 0),
@@ -3198,7 +3198,7 @@ Components.Window = (function()
 				PaddingTop = UDim.new(0, 2),
 			}),
 			New("ImageLabel", {
-				Image = "rbxassetid://9681970193",
+				Image = "rbxassetid://122336319739368",
 				Size = UDim2.new(1, 0, 1, 0),
 				BackgroundTransparency = 1,
 			}, {
@@ -7334,7 +7334,7 @@ function Library:CreateWindow(Config)
 	Main.ClipsDescendants = true
 	Main.Position = UDim2.new(0.081166774, 0, 0.0841463208, 0)
 	Main.Size = UDim2.new(0, 50, 0, 50)
-	Main.Image = "https://create.roblox.com/store/asset/122336319739368/Dwac"
+	Main.Image = "http://www.roblox.com/asset/?id=122336319739368"
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
 		local DragInput = nil
