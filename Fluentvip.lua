@@ -732,56 +732,56 @@ local Themes = {
 	Sakura = {
 		Name = "Sakura",
 		Accent = Color3.fromRGB(252, 209, 215),
-
-		AcrylicMain = Color3.fromRGB(40, 40, 40),
-		AcrylicBorder = Color3.fromRGB(130, 90, 110),
+	
+		AcrylicMain = Color3.fromRGB(252, 232, 236),
+		AcrylicBorder = Color3.fromRGB(255, 255, 255),
 		AcrylicGradient = ColorSequence.new{
-			ColorSequenceKeypoint.new(0, Color3.fromRGB(252, 209, 215)),
-			ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 231, 222)),
-			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(233, 177, 205)),
-			ColorSequenceKeypoint.new(0.75, Color3.fromRGB(195, 130, 158)),
-			ColorSequenceKeypoint.new(1, Color3.fromRGB(86, 33, 53)),
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 240, 243)),
+			ColorSequenceKeypoint.new(0.25, Color3.fromRGB(252, 228, 235)),
+			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(246, 210, 223)),
+			ColorSequenceKeypoint.new(0.75, Color3.fromRGB(235, 185, 204)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(225, 170, 190)),
 		},
 		AcrylicNoise = 0.92,
-
-		TitleBarLine = Color3.fromRGB(140, 85, 105),
-		Tab = Color3.fromRGB(132, 89, 95),
-
-		Element = Color3.fromRGB(220, 140, 190),
-		ElementBorder = Color3.fromRGB(110, 70, 85),
-		InElementBorder = Color3.fromRGB(120, 90, 90),
-		ElementTransparency = 0.86,
-
+	
+		TitleBarLine = Color3.fromRGB(255, 255, 255),
+		Tab = Color3.fromRGB(120, 85, 95),
+	
+		Element = Color3.fromRGB(255, 218, 228),
+		ElementBorder = Color3.fromRGB(255, 255, 255),
+		InElementBorder = Color3.fromRGB(255, 245, 248),
+		ElementTransparency = 0.82,
+	
 		ToggleSlider = Color3.fromRGB(252, 209, 215),
 		ToggleToggled = Color3.fromRGB(252, 209, 215),
 		TransparenToggle = 0.5,
-
+	
 		SliderRail = Color3.fromRGB(252, 209, 215),
-
-		DropdownFrame = Color3.fromRGB(252, 209, 215),
-		DropdownHolder = Color3.fromRGB(156, 103, 123),
-		DropdownBorder = Color3.fromRGB(90, 40, 55),
-		DropdownOption = Color3.fromRGB(252, 209, 215),
-
-		Keybind = Color3.fromRGB(200, 120, 170),
-
-		Input = Color3.fromRGB(200, 120, 170),
-		InputFocused = Color3.fromRGB(200, 200, 200),
-		InputIndicator = Color3.fromRGB(170, 150, 190),
-		InputIndicatorFocus = Color3.fromRGB(252,209,215),
-
-		Dialog = Color3.fromRGB(120, 50, 75),
-		DialogHolder = Color3.fromRGB(95, 40, 60),
-		DialogHolderLine = Color3.fromRGB(90, 35, 55),
-		DialogButton = Color3.fromRGB(120, 50, 75),
-		DialogButtonBorder = Color3.fromRGB(155, 90, 115),
-		DialogBorder = Color3.fromRGB(100, 70, 90),
-		DialogInput = Color3.fromRGB(135, 55, 80),
-		DialogInputLine = Color3.fromRGB(190, 160, 180),
-
-		Text = Color3.fromRGB(240, 240, 240),
-		SubText = Color3.fromRGB(220, 220, 220),
-		Hover = Color3.fromRGB(200, 120, 170),
+	
+		DropdownFrame = Color3.fromRGB(255, 220, 229),
+		DropdownHolder = Color3.fromRGB(250, 210, 221),
+		DropdownBorder = Color3.fromRGB(255, 255, 255),
+		DropdownOption = Color3.fromRGB(120, 85, 95),
+	
+		Keybind = Color3.fromRGB(245, 190, 205),
+	
+		Input = Color3.fromRGB(248, 205, 216),
+		InputFocused = Color3.fromRGB(255, 235, 240),
+		InputIndicator = Color3.fromRGB(252, 209, 215),
+		InputIndicatorFocus = Color3.fromRGB(255, 255, 255),
+	
+		Dialog = Color3.fromRGB(255, 220, 229),
+		DialogHolder = Color3.fromRGB(252, 210, 221),
+		DialogHolderLine = Color3.fromRGB(255, 255, 255),
+		DialogButton = Color3.fromRGB(255, 220, 229),
+		DialogButtonBorder = Color3.fromRGB(255, 255, 255),
+		DialogBorder = Color3.fromRGB(255, 255, 255),
+		DialogInput = Color3.fromRGB(248, 205, 216),
+		DialogInputLine = Color3.fromRGB(252, 209, 215),
+	
+		Text = Color3.fromRGB(70, 45, 55),
+		SubText = Color3.fromRGB(120, 85, 95),
+		Hover = Color3.fromRGB(255, 230, 236),
 		HoverChange = 0.04,
 	}
 }
@@ -2945,7 +2945,7 @@ Components.TitleBar = function(Config)
 	}, {
 		-- ── Logo (20×20, vertically centered, left) ──────────
 		New("ImageLabel", {
-			Image            = "rbxassetid://9681970193",
+			Image            = "rbxassetid://75904788880969",
 			Size             = UDim2.fromOffset(20, 20),
 			AnchorPoint      = Vector2.new(0, 0.5),
 			Position         = UDim2.new(0, 14, 0.5, 0),    -- 14px from left, vcenter
@@ -3017,7 +3017,7 @@ Components.TitleBar = function(Config)
 
 	-- logo
 	New("ImageLabel", {
-		Image            = "rbxassetid://9681970193",
+		Image            = "rbxassetid://75904788880969",
 		Size             = UDim2.fromOffset(20, 20),
 		AnchorPoint      = Vector2.new(0, 0.5),
 		Position         = UDim2.new(0, 14, 0.5, 0),
@@ -3198,7 +3198,7 @@ Components.Window = (function()
 				PaddingTop = UDim.new(0, 2),
 			}),
 			New("ImageLabel", {
-				Image = "rbxassetid://9681970193",
+				Image = "rbxassetid://75904788880969",
 				Size = UDim2.new(1, 0, 1, 0),
 				BackgroundTransparency = 1,
 			}, {
@@ -7158,7 +7158,7 @@ function Library:CreateWindow(Config)
 	-- 			PaddingTop = UDim.new(0, 2),
 	-- 		}),
 	-- 		New("ImageLabel", {
-	-- 			Image = Config.MinimizerIcon or "rbxassetid://9681970193",
+	-- 			Image = Config.MinimizerIcon or "rbxassetid://75904788880969",
 	-- 			Size = UDim2.new(1, 0, 1, 0),
 	-- 			BackgroundTransparency = 1,
 	-- 		}, {
@@ -7334,7 +7334,7 @@ function Library:CreateWindow(Config)
 	Main.ClipsDescendants = true
 	Main.Position = UDim2.new(0.081166774, 0, 0.0841463208, 0)
 	Main.Size = UDim2.new(0, 50, 0, 50)
-	Main.Image = "http://www.roblox.com/asset/?id=9681970193"
+	Main.Image = "http://www.roblox.com/asset/?id=75904788880969"
 	local function MakeDraggable(topbarobject, object)
 		local Dragging = nil
 		local DragInput = nil
