@@ -1,9 +1,3 @@
---[[
-	Credit:
-	Original Fluent : https://github.com/dawid-scripts/Fluent
-	Themes : https://github.com/ActualMasterOogway/Fluent-Renewed/
-]]
-
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
