@@ -1406,7 +1406,7 @@ function Creator.GetThemeProperty(Property)
 	if Themes[Library.Theme][Property] then
 		return Themes[Library.Theme][Property]
 	end
-	return Themes["Dark"][Property]
+	return Themes["Sakura"][Property]
 end
 
 function Creator.New(Name, Properties, Children)
