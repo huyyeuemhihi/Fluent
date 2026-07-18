@@ -726,56 +726,57 @@ local Themes = {
 	BlackGlass = {
 		Name = "BlackGlass",
 	
-		Accent = Color3.fromRGB(90, 170, 255),
+		Accent = Color3.fromRGB(255,255,255),
 	
-		AcrylicMain = Color3.fromRGB(18,18,18),
-		AcrylicBorder = Color3.fromRGB(255,255,255),
+		AcrylicMain = Color3.fromRGB(30,30,30),
+		AcrylicBorder = Color3.fromRGB(245,245,245),
 		AcrylicGradient = ColorSequence.new{
-			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(42,42,42)),
-			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(25,25,25)),
-			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(12,12,12)),
+			ColorSequenceKeypoint.new(0.00, Color3.fromRGB(58,58,58)),
+			ColorSequenceKeypoint.new(0.50, Color3.fromRGB(42,42,42)),
+			ColorSequenceKeypoint.new(1.00, Color3.fromRGB(24,24,24)),
 		},
-		AcrylicNoise = 0.99,
+		AcrylicNoise = 0.985,
 	
 		TitleBarLine = Color3.fromRGB(255,255,255),
 		Tab = Color3.fromRGB(255,255,255),
 	
-		Element = Color3.fromRGB(28,28,28),
-		ElementBorder = Color3.fromRGB(255,255,255),
-		InElementBorder = Color3.fromRGB(90,90,90),
-		ElementTransparency = 0.45,
+		Element = Color3.fromRGB(46,46,46),
+		ElementBorder = Color3.fromRGB(245,245,245),
+		InElementBorder = Color3.fromRGB(140,140,140),
+		ElementTransparency = 0.32,
 	
-		ToggleSlider = Color3.fromRGB(245,245,245),
-		ToggleToggled = Color3.fromRGB(70,70,70),
-		TransparenToggle = 0.15,
+		-- Toggle
+		ToggleSlider = Color3.fromRGB(255,255,255),
+		ToggleToggled = Color3.fromRGB(190,190,190),
+		TransparenToggle = 0.05,
 	
-		SliderRail = Color3.fromRGB(180,180,180),
+		SliderRail = Color3.fromRGB(205,205,205),
 	
-		DropdownFrame = Color3.fromRGB(24,24,24),
-		DropdownHolder = Color3.fromRGB(18,18,18),
-		DropdownBorder = Color3.fromRGB(255,255,255),
-		DropdownOption = Color3.fromRGB(245,245,245),
+		DropdownFrame = Color3.fromRGB(42,42,42),
+		DropdownHolder = Color3.fromRGB(35,35,35),
+		DropdownBorder = Color3.fromRGB(245,245,245),
+		DropdownOption = Color3.fromRGB(255,255,255),
 	
-		Keybind = Color3.fromRGB(35,35,35),
+		Keybind = Color3.fromRGB(48,48,48),
 	
-		Input = Color3.fromRGB(22,22,22),
-		InputFocused = Color3.fromRGB(35,35,35),
+		Input = Color3.fromRGB(40,40,40),
+		InputFocused = Color3.fromRGB(60,60,60),
 		InputIndicator = Color3.fromRGB(255,255,255),
 		InputIndicatorFocus = Color3.fromRGB(255,255,255),
 	
-		Dialog = Color3.fromRGB(22,22,22),
-		DialogHolder = Color3.fromRGB(16,16,16),
-		DialogHolderLine = Color3.fromRGB(255,255,255),
-		DialogButton = Color3.fromRGB(30,30,30),
-		DialogButtonBorder = Color3.fromRGB(255,255,255),
-		DialogBorder = Color3.fromRGB(255,255,255),
-		DialogInput = Color3.fromRGB(25,25,25),
+		Dialog = Color3.fromRGB(40,40,40),
+		DialogHolder = Color3.fromRGB(34,34,34),
+		DialogHolderLine = Color3.fromRGB(245,245,245),
+		DialogButton = Color3.fromRGB(52,52,52),
+		DialogButtonBorder = Color3.fromRGB(245,245,245),
+		DialogBorder = Color3.fromRGB(245,245,245),
+		DialogInput = Color3.fromRGB(42,42,42),
 		DialogInputLine = Color3.fromRGB(255,255,255),
 	
 		Text = Color3.fromRGB(255,255,255),
-		SubText = Color3.fromRGB(175,175,175),
+		SubText = Color3.fromRGB(205,205,205),
 	
-		Hover = Color3.fromRGB(55,55,55),
+		Hover = Color3.fromRGB(72,72,72),
 		HoverChange = 0.06,
 	}
 }
