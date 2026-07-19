@@ -678,54 +678,54 @@ local Themes = {
 	CottonCandy = {
 		Name = "CottonCandy",
 	
-		Accent = Color3.fromRGB(255, 128, 192),
+		Accent = Color3.fromRGB(248, 102, 177),
 	
-		AcrylicMain = Color3.fromRGB(42, 32, 40),
-		AcrylicBorder = Color3.fromRGB(82, 58, 78),
+		AcrylicMain = Color3.fromRGB(18, 18, 22),
+		AcrylicBorder = Color3.fromRGB(78, 48, 74),
 		AcrylicGradient = ColorSequence.new(
-			Color3.fromRGB(34, 24, 32),
-			Color3.fromRGB(20, 16, 22)
+			Color3.fromRGB(26, 20, 28),
+			Color3.fromRGB(12, 12, 16)
 		),
-		AcrylicNoise = 0.8,
+		AcrylicNoise = 0.82,
 	
-		TitleBarLine = Color3.fromRGB(82, 58, 78),
-		Tab = Color3.fromRGB(210, 180, 205),
+		TitleBarLine = Color3.fromRGB(82, 52, 78),
+		Tab = Color3.fromRGB(235, 235, 240),
 	
-		Element = Color3.fromRGB(56, 40, 52),
-		ElementBorder = Color3.fromRGB(82, 58, 78),
-		InElementBorder = Color3.fromRGB(110, 82, 108),
-		ElementTransparency = 0.85,
+		Element = Color3.fromRGB(30, 22, 30),
+		ElementBorder = Color3.fromRGB(74, 46, 72),
+		InElementBorder = Color3.fromRGB(105, 85, 110),
+		ElementTransparency = 0.2,
 	
-		ToggleSlider = Color3.fromRGB(80, 60, 78),
-		ToggleToggled = Color3.fromRGB(255, 128, 192),
+		ToggleSlider = Color3.fromRGB(72, 46, 68),
+		ToggleToggled = Color3.fromRGB(248, 102, 177),
 	
-		SliderRail = Color3.fromRGB(255, 128, 192),
+		SliderRail = Color3.fromRGB(248, 102, 177),
 	
-		DropdownFrame = Color3.fromRGB(60, 44, 56),
-		DropdownHolder = Color3.fromRGB(42, 32, 40),
-		DropdownBorder = Color3.fromRGB(82, 58, 78),
-		DropdownOption = Color3.fromRGB(225, 205, 220),
+		DropdownFrame = Color3.fromRGB(28, 20, 28),
+		DropdownHolder = Color3.fromRGB(20, 16, 20),
+		DropdownBorder = Color3.fromRGB(74, 46, 72),
+		DropdownOption = Color3.fromRGB(242, 236, 242),
 	
-		Keybind = Color3.fromRGB(56, 40, 52),
+		Keybind = Color3.fromRGB(34, 24, 34),
 	
-		Input = Color3.fromRGB(60, 44, 56),
-		InputFocused = Color3.fromRGB(28, 20, 28),
-		InputIndicator = Color3.fromRGB(160, 120, 155),
+		Input = Color3.fromRGB(30, 22, 30),
+		InputFocused = Color3.fromRGB(42, 28, 40),
+		InputIndicator = Color3.fromRGB(82, 52, 78),
 	
-		Dialog = Color3.fromRGB(42, 32, 40),
-		DialogHolder = Color3.fromRGB(34, 26, 34),
-		DialogHolderLine = Color3.fromRGB(82, 58, 78),
-		DialogButton = Color3.fromRGB(48, 36, 46),
-		DialogButtonBorder = Color3.fromRGB(96, 68, 90),
-		DialogBorder = Color3.fromRGB(82, 58, 78),
-		DialogInput = Color3.fromRGB(56, 40, 52),
-		DialogInputLine = Color3.fromRGB(255, 128, 192),
+		Dialog = Color3.fromRGB(28, 20, 28),
+		DialogHolder = Color3.fromRGB(20, 16, 20),
+		DialogHolderLine = Color3.fromRGB(82, 52, 78),
+		DialogButton = Color3.fromRGB(34, 24, 34),
+		DialogButtonBorder = Color3.fromRGB(82, 52, 78),
+		DialogBorder = Color3.fromRGB(82, 52, 78),
+		DialogInput = Color3.fromRGB(32, 24, 32),
+		DialogInputLine = Color3.fromRGB(248, 102, 177),
 	
-		Text = Color3.fromRGB(255, 240, 248),
-		SubText = Color3.fromRGB(190, 165, 185),
+		Text = Color3.fromRGB(252, 248, 252),
+		SubText = Color3.fromRGB(188, 170, 188),
 	
-		Hover = Color3.fromRGB(74, 54, 70),
-		HoverChange = 0.07,
+		Hover = Color3.fromRGB(50, 34, 48),
+		HoverChange = 0.06,
 	},
 	BlackGlass = {
 		Name = "BlackGlass",
@@ -3256,7 +3256,7 @@ Components.Window = (function()
 
 		local AcrylicFrame = New("Frame", {
 		    Size = UDim2.fromScale(1, 1),
-			BackgroundTransparency = 0.2,										
+			BackgroundTransparency = 0.12,										
 		    ThemeTag = { BackgroundColor3 = "AcrylicMain" },
 		}, {
 		    New("UICorner", { CornerRadius = UDim.new(0, 8) }),
@@ -4015,7 +4015,7 @@ ElementsTable.Dropdown = (function()
         local DropdownSearch = New("TextBox", {
 			FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal),
 			Text = "",
-			PlaceholderText = "🔍 Search...",
+			PlaceholderText = "Search...",
 			PlaceholderColor3 = Color3.fromRGB(180, 180, 190),
             Parent = SearchBase,
 			TextColor3 = Color3.fromRGB(240, 240, 240),
