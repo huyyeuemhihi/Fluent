@@ -28,7 +28,7 @@ local Themes = {
 		"Aqua",
 		"Amethyst",
 		"Amethyst Dark",
-		"Cotton Candy",
+		"CottonCandy",
 		"BlackGlass"
 	},
 	["VSC Dark High Contrast"] = {
