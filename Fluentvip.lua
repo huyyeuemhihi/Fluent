@@ -675,7 +675,7 @@ local Themes = {
 		Hover = Color3.fromRGB(140, 120, 160),
 		HoverChange = 0.04,
 	},
-	CottonCandy = {
+	["Cotton Candy"] = {
 		Name = "Cotton Candy",
 	
 		Accent = Color3.fromRGB(255, 128, 192),
