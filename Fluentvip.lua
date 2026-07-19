@@ -28,9 +28,9 @@ local Themes = {
 		"Aqua",
 		"Amethyst",
 		"Amethyst Dark",
-		"Amber Glow",
-		"Neon Cyber",
-		"Deep Ocean",
+		"AmberGlow",
+		"NeonCyber",
+		"DeepOcean",
 		"Orange",
 		"CottonCandy",
 		"BlackGlass"
@@ -680,7 +680,7 @@ local Themes = {
 		HoverChange = 0.04,
 	},
 	AmberGlow = {
-	    Name = "Amber Glow",
+	    Name = "AmberGlow",
 	
 	    Accent = Color3.fromRGB(255, 160, 64),
 	
@@ -733,7 +733,7 @@ local Themes = {
 	    HoverChange = 0.07,
 	},
 	NeonCyber = {
-	    Name = "Neon Cyber",
+	    Name = "NeonCyber",
 	
 	    Accent = Color3.fromRGB(0,255,170),
 	
@@ -786,7 +786,7 @@ local Themes = {
 	    HoverChange = 0.07,
 	},
 	DeepOcean = {
-	    Name = "Deep Ocean",
+	    Name = "DeepOcean",
 	
 	    Accent = Color3.fromRGB(0,136,204),
 	
