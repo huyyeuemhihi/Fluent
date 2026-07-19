@@ -3252,7 +3252,7 @@ Components.Window = (function()
 
 		local AcrylicFrame = New("Frame", {
 		    Size = UDim2.fromScale(1, 1),
-			BackgroundTransparency = 0.4,										
+			BackgroundTransparency = 0.2,										
 		    ThemeTag = { BackgroundColor3 = "AcrylicMain" },
 		}, {
 		    New("UICorner", { CornerRadius = UDim.new(0, 8) }),
