@@ -28,7 +28,7 @@ local Themes = {
 		"Aqua",
 		"Amethyst",
 		"Amethyst Dark",
-		"BloodRed"
+		"BloodRed",
 		"AmberGlow",
 		"NeonCyber",
 		"DeepOcean",
