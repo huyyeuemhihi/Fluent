@@ -3553,23 +3553,45 @@ Components.Window = (function()
 			):Play()
 		end)
 
-		-- loc tab theo ten khi go
+		-- ── loc cac element (function) trong tab khi go ──────
+		local function ElementMatches(frame, q)
+			for _, d in ipairs(frame:GetDescendants()) do
+				if d:IsA("TextLabel") and d.Text ~= "" and d.Text:lower():find(q, 1, true) then
+					return true
+				end
+			end
+			return false
+		end
+
+		local function FilterContainer(container, q)
+			local anyVisible = false
+			for _, child in ipairs(container:GetChildren()) do
+				if child:IsA("TextButton") then
+					-- element frame (Toggle/Button/Slider/Dropdown/...)
+					local vis = (q == "") or ElementMatches(child, q)
+					child.Visible = vis
+					anyVisible = anyVisible or vis
+				elseif child:IsA("Frame") then
+					-- section root: loc element ben trong section
+					local vis = FilterContainer(child, q)
+					local sectionTitle = child:FindFirstChildOfClass("TextLabel")
+					if sectionTitle then
+						-- day la Section.Root -> an neu khong co element khop
+						child.Visible = (q == "") or vis
+							or (sectionTitle.Text:lower():find(q, 1, true) ~= nil)
+					end
+					anyVisible = anyVisible or child.Visible ~= false and vis or vis
+				end
+			end
+			return anyVisible
+		end
+
 		Creator.AddSignal(SearchInput:GetPropertyChangedSignal("Text"), function()
 			local q = SearchInput.Text:lower()
-			for _, btn in ipairs(Window.TabHolder:GetChildren()) do
-				if btn:IsA("TextButton") then
-					if q == "" then
-						btn.Visible = true
-					else
-						local label = nil
-						for _, d in ipairs(btn:GetDescendants()) do
-							if d:IsA("TextLabel") then
-								label = d
-								break
-							end
-						end
-						btn.Visible = (label and label.Text:lower():find(q, 1, true) ~= nil) or false
-					end
+			-- loc trong tat ca cac tab container (ap dung ca khi doi tab)
+			for _, container in ipairs(Window.ContainerHolder:GetChildren()) do
+				if container:IsA("ScrollingFrame") then
+					FilterContainer(container, q)
 				end
 			end
 		end)
