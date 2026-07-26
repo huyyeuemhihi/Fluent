@@ -2581,6 +2581,11 @@ Components.Tab = (function()
 
 		TabModule.SelectedTab = Tab
 
+		-- neu dang search thi xoa search de tra element ve cho cu
+		if Window.ClearSearch then
+			Window.ClearSearch()
+		end
+
 		-- deselect all
 		for _, TabObject in next, TabModule.Tabs do
 			TabObject.Selected = false
@@ -3491,6 +3496,9 @@ Components.Window = (function()
 
 		local OFFSETY = 0  -- tab list เริ่มใต้ titlebar ทันที
 
+		-- ── Search bar toggle (Config.SearchBar) ──────────────
+		local UseSearchBar = Config.SearchBar and true or false
+
 		-- ── Search box (tren cung phan hien thi tab) ──────────
 		local SearchIcon = New("ImageLabel", {
 			Image       = "rbxassetid://10734943674",
@@ -3527,6 +3535,7 @@ Components.Window = (function()
 			Size     = UDim2.new(0, Window.TabWidth, 0, 30),
 			Position = UDim2.new(0, 12, 0, 52),
 			BackgroundTransparency = 0.9,
+			Visible  = UseSearchBar,
 			ThemeTag = { BackgroundColor3 = "Input" },
 		}, {
 			New("UICorner", { CornerRadius = UDim.new(0, 8) }),
@@ -3549,36 +3558,156 @@ Components.Window = (function()
 			):Play()
 		end)
 
-		-- loc tab theo ten khi go
-		Creator.AddSignal(SearchInput:GetPropertyChangedSignal("Text"), function()
-			local q = SearchInput.Text:lower()
-			for _, btn in ipairs(Window.TabHolder:GetChildren()) do
-				if btn:IsA("TextButton") then
-					if q == "" then
-						btn.Visible = true
-					else
-						local label = nil
-						for _, d in ipairs(btn:GetDescendants()) do
-							if d:IsA("TextLabel") then
-								label = d
-								break
-							end
-						end
-						btn.Visible = (label and label.Text:lower():find(q, 1, true) ~= nil) or false
-					end
+		-- ── Search: gom ket qua tu TAT CA cac tab vao 1 khung ──
+		local SearchLayout = New("UIListLayout", {
+			Padding   = UDim.new(0, 5),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+		})
+
+		local SearchResults = New("ScrollingFrame", {
+			Size = UDim2.fromScale(1, 1),
+			BackgroundTransparency = 1,
+			Visible = false,
+			ZIndex = 5,
+			BottomImage = "rbxassetid://6889812791",
+			MidImage = "rbxassetid://6889812721",
+			TopImage = "rbxassetid://6276641225",
+			ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255),
+			ScrollBarImageTransparency = 0.95,
+			ScrollBarThickness = 3,
+			BorderSizePixel = 0,
+			CanvasSize = UDim2.fromScale(0, 0),
+			ScrollingDirection = Enum.ScrollingDirection.Y,
+		}, {
+			SearchLayout,
+			New("UIPadding", {
+				PaddingRight  = UDim.new(0, 10),
+				PaddingLeft   = UDim.new(0, 1),
+				PaddingTop    = UDim.new(0, 1),
+				PaddingBottom = UDim.new(0, 1),
+			}),
+		})
+
+		Creator.AddSignal(SearchLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+			SearchResults.CanvasSize = UDim2.new(0, 0, 0, SearchLayout.AbsoluteContentSize.Y + 2)
+		end)
+
+		local MovedElements = {} -- { {Element, Parent, LayoutOrder}, ... }
+
+		local function ElementMatches(frame, q)
+			for _, d in ipairs(frame:GetDescendants()) do
+				if d:IsA("TextLabel") and d.Text ~= "" and d.Text:lower():find(q, 1, true) then
+					return true
 				end
 			end
+			return false
+		end
+
+		-- tra cac element da di chuyen ve dung tab/section cu
+		local function RestoreElements()
+			for _, info in ipairs(MovedElements) do
+				info.Element.LayoutOrder = info.LayoutOrder
+				info.Element.Parent = info.Parent
+			end
+			MovedElements = {}
+		end
+
+		-- tim element khop trong container (ke ca trong Section) va don vao SearchResults
+		local function CollectMatches(container, q, order)
+			for _, child in ipairs(container:GetChildren()) do
+				if child:IsA("TextButton") then
+					if ElementMatches(child, q) then
+						table.insert(MovedElements, {
+							Element = child,
+							Parent = child.Parent,
+							LayoutOrder = child.LayoutOrder,
+						})
+						child.LayoutOrder = order.n
+						order.n = order.n + 1
+						child.Parent = SearchResults
+					end
+				elseif child:IsA("Frame") then
+					CollectMatches(child, q, order)
+				end
+			end
+		end
+
+		-- dung de xoa search khi nguoi dung bam sang tab khac
+		Window.ClearSearch = function()
+			if SearchInput.Text ~= "" then
+				SearchInput.Text = ""
+			end
+		end
+
+		Creator.AddSignal(SearchInput:GetPropertyChangedSignal("Text"), function()
+			local q = SearchInput.Text:lower()
+
+			-- luon tra element ve cho cu truoc khi loc lai
+			RestoreElements()
+
+			if q == "" then
+				SearchResults.Visible = false
+				-- hien lai tat ca nut tab + container cua tab dang chon
+				for _, Tab in next, Components.Tab.Tabs do
+					if Tab.Frame then Tab.Frame.Visible = true end
+				end
+				for _, Container in next, Components.Tab.Containers do
+					Container.Visible = false
+				end
+				local Sel = Components.Tab.Containers[Components.Tab.SelectedTab]
+				if Sel then Sel.Visible = true end
+				return
+			end
+
+			-- parent lazy vi ContainerCanvas duoc tao sau doan code nay
+			if not SearchResults.Parent and Window.ContainerCanvas then
+				SearchResults.Parent = Window.ContainerCanvas
+			end
+
+			-- an het container cac tab, chi hien khung ket qua
+			for _, Container in next, Components.Tab.Containers do
+				Container.Visible = false
+			end
+
+			-- gom element khop tu TAT CA cac tab
+			local order = { n = 1 }
+			for _, Tab in next, Components.Tab.Tabs do
+				local before = #MovedElements
+				if Tab.ContainerFrame then
+					CollectMatches(Tab.ContainerFrame, q, order)
+				end
+				local hasMatch = #MovedElements > before
+				local nameMatch = Tab.Name
+					and tostring(Tab.Name):lower():find(q, 1, true) ~= nil
+				if Tab.Frame then
+					Tab.Frame.Visible = hasMatch or nameMatch or false
+				end
+			end
+
+			SearchResults.Visible = true
 		end)
 
 		local TabFrame = New("Frame", {
-			Size             = UDim2.new(0, Window.TabWidth, 1, -104),
-			Position         = UDim2.new(0, 12, 0, 92),
+			Size             = UDim2.new(0, Window.TabWidth, 1, UseSearchBar and -104 or -64),
+			Position         = UDim2.new(0, 12, 0, UseSearchBar and 92 or 52),
 			BackgroundTransparency = 1,
 			ClipsDescendants = true,
 		}, {
 			Window.TabHolder,
 			Selector,
 		})
+
+		-- ── API bật/tắt search bar ────────────────────────────
+		function Window:SetSearchBar(Value)
+			UseSearchBar = Value and true or false
+			SearchBox.Visible = UseSearchBar
+			if not UseSearchBar then
+				-- reset filter khi tắt
+				SearchInput.Text = ""
+			end
+			TabFrame.Size     = UDim2.new(0, Window.TabWidth, 1, UseSearchBar and -104 or -64)
+			TabFrame.Position = UDim2.new(0, 12, 0, UseSearchBar and 92 or 52)
+		end
 
 		Window.TabDisplay = New("TextLabel", {
 			RichText         = true,
@@ -4455,22 +4584,21 @@ ElementsTable.Dropdown = (function()
 		end
 
 		local function RecalculateCanvasSize()
-			-- คำนวณ canvas size จากจำนวน items ที่โหลดแล้ว + พื้นที่สำหรับ loading indicator
-			local loadedItems = Dropdown.LoadedItems
-			local totalItems = #Dropdown.Values
-			local itemHeight = 36 -- เพิ่มขนาด item
-			local itemPadding = 4
-			
-			-- ขนาดของ items ที่โหลดแล้ว
-			local loadedHeight = loadedItems * itemHeight + math.max(0, loadedItems - 1) * itemPadding
-			
-			-- เพิ่มพื้นที่สำหรับ loading indicator ถ้ายังโหลดไม่หมด
-			if loadedItems < totalItems then
-				loadedHeight = loadedHeight + 45 -- พื้นที่สำหรับ loading indicator + trigger zone
+			-- Dung kich thuoc THAT tu UIListLayout (item 34px + padding 10px)
+			-- thay vi uoc luong 36/4 -> truoc day canvas nho hon noi dung that,
+			-- lam khong the cuon xuong xem item thu 6+ duoc
+			local contentHeight = DropdownListLayout.AbsoluteContentSize.Y
+
+			-- Them cho cho loading indicator neu con item chua load
+			if Dropdown.LoadedItems < #Dropdown.Values then
+				contentHeight = contentHeight + 45
 			end
-			
-			DropdownScrollFrame.CanvasSize = UDim2.fromOffset(0, loadedHeight)
+
+			DropdownScrollFrame.CanvasSize = UDim2.fromOffset(0, contentHeight + 10)
 		end
+
+		-- Cap nhat canvas moi khi noi dung list thay doi (load them batch, filter...)
+		Creator.AddSignal(DropdownListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), RecalculateCanvasSize)
 
 		RecalculateListPosition()
 		RecalculateListSize()
@@ -7498,6 +7626,7 @@ function Library:CreateWindow(Config)
 		Title = Config.Title,
 		SubTitle = Config.SubTitle,
 		TabWidth = Config.TabWidth,
+		SearchBar = Config.SearchBar,
 	})
 
 	Library.Window = Window
