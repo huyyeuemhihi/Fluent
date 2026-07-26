@@ -3572,15 +3572,19 @@ Components.Window = (function()
 					child.Visible = vis
 					anyVisible = anyVisible or vis
 				elseif child:IsA("Frame") then
-					-- section root: loc element ben trong section
-					local vis = FilterContainer(child, q)
 					local sectionTitle = child:FindFirstChildOfClass("TextLabel")
 					if sectionTitle then
-						-- day la Section.Root -> an neu khong co element khop
-						child.Visible = (q == "") or vis
-							or (sectionTitle.Text:lower():find(q, 1, true) ~= nil)
+						-- Section root: neu ten section khop -> hien het element ben trong
+						local titleMatch = q ~= "" and sectionTitle.Text:lower():find(q, 1, true) ~= nil
+						local innerVis = FilterContainer(child, titleMatch and "" or q)
+						local vis = (q == "") or titleMatch or innerVis
+						child.Visible = vis
+						anyVisible = anyVisible or vis
+					else
+						-- frame chua element (vd: Section.Container)
+						local innerVis = FilterContainer(child, q)
+						anyVisible = anyVisible or innerVis
 					end
-					anyVisible = anyVisible or child.Visible ~= false and vis or vis
 				end
 			end
 			return anyVisible
@@ -3588,10 +3592,17 @@ Components.Window = (function()
 
 		Creator.AddSignal(SearchInput:GetPropertyChangedSignal("Text"), function()
 			local q = SearchInput.Text:lower()
-			-- loc trong tat ca cac tab container (ap dung ca khi doi tab)
-			for _, container in ipairs(Window.ContainerHolder:GetChildren()) do
-				if container:IsA("ScrollingFrame") then
-					FilterContainer(container, q)
+			-- duyet qua tat ca cac tab: loc element ben trong + an/hien nut tab
+			for _, Tab in next, Components.Tab.Tabs do
+				local hasMatch = false
+				if Tab.ContainerFrame then
+					hasMatch = FilterContainer(Tab.ContainerFrame, q)
+				end
+				local nameMatch = q ~= "" and Tab.Name
+					and tostring(Tab.Name):lower():find(q, 1, true) ~= nil
+				if Tab.Frame then
+					-- tab hien neu: khong search / co element khop / ten tab khop
+					Tab.Frame.Visible = (q == "") or hasMatch or nameMatch or false
 				end
 			end
 		end)
