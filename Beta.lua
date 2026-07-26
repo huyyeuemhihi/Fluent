@@ -2581,6 +2581,11 @@ Components.Tab = (function()
 
 		TabModule.SelectedTab = Tab
 
+		-- neu dang search thi xoa search de tra element ve cho cu
+		if Window.ClearSearch then
+			Window.ClearSearch()
+		end
+
 		-- deselect all
 		for _, TabObject in next, TabModule.Tabs do
 			TabObject.Selected = false
@@ -3553,7 +3558,42 @@ Components.Window = (function()
 			):Play()
 		end)
 
-		-- ── loc cac element (function) trong tab khi go ──────
+		-- ── Search: gom ket qua tu TAT CA cac tab vao 1 khung ──
+		local SearchLayout = New("UIListLayout", {
+			Padding   = UDim.new(0, 5),
+			SortOrder = Enum.SortOrder.LayoutOrder,
+		})
+
+		local SearchResults = New("ScrollingFrame", {
+			Size = UDim2.fromScale(1, 1),
+			BackgroundTransparency = 1,
+			Visible = false,
+			ZIndex = 5,
+			BottomImage = "rbxassetid://6889812791",
+			MidImage = "rbxassetid://6889812721",
+			TopImage = "rbxassetid://6276641225",
+			ScrollBarImageColor3 = Color3.fromRGB(255, 255, 255),
+			ScrollBarImageTransparency = 0.95,
+			ScrollBarThickness = 3,
+			BorderSizePixel = 0,
+			CanvasSize = UDim2.fromScale(0, 0),
+			ScrollingDirection = Enum.ScrollingDirection.Y,
+		}, {
+			SearchLayout,
+			New("UIPadding", {
+				PaddingRight  = UDim.new(0, 10),
+				PaddingLeft   = UDim.new(0, 1),
+				PaddingTop    = UDim.new(0, 1),
+				PaddingBottom = UDim.new(0, 1),
+			}),
+		})
+
+		Creator.AddSignal(SearchLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+			SearchResults.CanvasSize = UDim2.new(0, 0, 0, SearchLayout.AbsoluteContentSize.Y + 2)
+		end)
+
+		local MovedElements = {} -- { {Element, Parent, LayoutOrder}, ... }
+
 		local function ElementMatches(frame, q)
 			for _, d in ipairs(frame:GetDescendants()) do
 				if d:IsA("TextLabel") and d.Text ~= "" and d.Text:lower():find(q, 1, true) then
@@ -3563,48 +3603,88 @@ Components.Window = (function()
 			return false
 		end
 
-		local function FilterContainer(container, q)
-			local anyVisible = false
+		-- tra cac element da di chuyen ve dung tab/section cu
+		local function RestoreElements()
+			for _, info in ipairs(MovedElements) do
+				info.Element.LayoutOrder = info.LayoutOrder
+				info.Element.Parent = info.Parent
+			end
+			MovedElements = {}
+		end
+
+		-- tim element khop trong container (ke ca trong Section) va don vao SearchResults
+		local function CollectMatches(container, q, order)
 			for _, child in ipairs(container:GetChildren()) do
 				if child:IsA("TextButton") then
-					-- element frame (Toggle/Button/Slider/Dropdown/...)
-					local vis = (q == "") or ElementMatches(child, q)
-					child.Visible = vis
-					anyVisible = anyVisible or vis
-				elseif child:IsA("Frame") then
-					local sectionTitle = child:FindFirstChildOfClass("TextLabel")
-					if sectionTitle then
-						-- Section root: neu ten section khop -> hien het element ben trong
-						local titleMatch = q ~= "" and sectionTitle.Text:lower():find(q, 1, true) ~= nil
-						local innerVis = FilterContainer(child, titleMatch and "" or q)
-						local vis = (q == "") or titleMatch or innerVis
-						child.Visible = vis
-						anyVisible = anyVisible or vis
-					else
-						-- frame chua element (vd: Section.Container)
-						local innerVis = FilterContainer(child, q)
-						anyVisible = anyVisible or innerVis
+					if ElementMatches(child, q) then
+						table.insert(MovedElements, {
+							Element = child,
+							Parent = child.Parent,
+							LayoutOrder = child.LayoutOrder,
+						})
+						child.LayoutOrder = order.n
+						order.n = order.n + 1
+						child.Parent = SearchResults
 					end
+				elseif child:IsA("Frame") then
+					CollectMatches(child, q, order)
 				end
 			end
-			return anyVisible
+		end
+
+		-- dung de xoa search khi nguoi dung bam sang tab khac
+		Window.ClearSearch = function()
+			if SearchInput.Text ~= "" then
+				SearchInput.Text = ""
+			end
 		end
 
 		Creator.AddSignal(SearchInput:GetPropertyChangedSignal("Text"), function()
 			local q = SearchInput.Text:lower()
-			-- duyet qua tat ca cac tab: loc element ben trong + an/hien nut tab
-			for _, Tab in next, Components.Tab.Tabs do
-				local hasMatch = false
-				if Tab.ContainerFrame then
-					hasMatch = FilterContainer(Tab.ContainerFrame, q)
+
+			-- luon tra element ve cho cu truoc khi loc lai
+			RestoreElements()
+
+			if q == "" then
+				SearchResults.Visible = false
+				-- hien lai tat ca nut tab + container cua tab dang chon
+				for _, Tab in next, Components.Tab.Tabs do
+					if Tab.Frame then Tab.Frame.Visible = true end
 				end
-				local nameMatch = q ~= "" and Tab.Name
+				for _, Container in next, Components.Tab.Containers do
+					Container.Visible = false
+				end
+				local Sel = Components.Tab.Containers[Components.Tab.SelectedTab]
+				if Sel then Sel.Visible = true end
+				return
+			end
+
+			-- parent lazy vi ContainerCanvas duoc tao sau doan code nay
+			if not SearchResults.Parent and Window.ContainerCanvas then
+				SearchResults.Parent = Window.ContainerCanvas
+			end
+
+			-- an het container cac tab, chi hien khung ket qua
+			for _, Container in next, Components.Tab.Containers do
+				Container.Visible = false
+			end
+
+			-- gom element khop tu TAT CA cac tab
+			local order = { n = 1 }
+			for _, Tab in next, Components.Tab.Tabs do
+				local before = #MovedElements
+				if Tab.ContainerFrame then
+					CollectMatches(Tab.ContainerFrame, q, order)
+				end
+				local hasMatch = #MovedElements > before
+				local nameMatch = Tab.Name
 					and tostring(Tab.Name):lower():find(q, 1, true) ~= nil
 				if Tab.Frame then
-					-- tab hien neu: khong search / co element khop / ten tab khop
-					Tab.Frame.Visible = (q == "") or hasMatch or nameMatch or false
+					Tab.Frame.Visible = hasMatch or nameMatch or false
 				end
 			end
+
+			SearchResults.Visible = true
 		end)
 
 		local TabFrame = New("Frame", {
