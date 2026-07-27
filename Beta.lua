@@ -2134,6 +2134,17 @@ local Spring = Flipper.Spring.new
 local Instant = Flipper.Instant.new
 local AddSignal = Creator.AddSignal
 
+-- LayoutOrder duy nhat cho moi element/section.
+-- Truoc day tat ca deu = 7 -> UIListLayout phai dua vao thu tu child de xep,
+-- khi search di chuyen element sang khung ket qua roi tra ve (re-parent ve cuoi
+-- danh sach child) thi thu tu bi xao tron. Danh so tang dan de thu tu luon
+-- co dinh theo luc tao, khong phu thuoc thu tu re-parent.
+local ElementLayoutOrder = 0
+local function NextLayoutOrder()
+	ElementLayoutOrder = ElementLayoutOrder + 1
+	return ElementLayoutOrder
+end
+
 Components.Element = function(Title, Desc, Parent, Hover, Options)
 	local Element = { Original = { Text = "" } }
 	local Options = Options or {}
@@ -2206,7 +2217,7 @@ Components.Element = function(Title, Desc, Parent, Hover, Options)
 		Parent = Parent,
 		AutomaticSize = Enum.AutomaticSize.Y,
 		Text = "",
-		LayoutOrder = 7,
+		LayoutOrder = NextLayoutOrder(),
 		ThemeTag = {
 			BackgroundColor3 = "Element",
 			BackgroundTransparency = "ElementTransparency",
@@ -2311,7 +2322,7 @@ Components.Section = function(Title, Parent)
 	Section.Root = New("Frame", {
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 26),
-		LayoutOrder = 7,
+		LayoutOrder = NextLayoutOrder(),
 		Parent = Parent,
 	}, {
 		New("TextLabel", {
@@ -4584,22 +4595,21 @@ ElementsTable.Dropdown = (function()
 		end
 
 		local function RecalculateCanvasSize()
-			-- คำนวณ canvas size จากจำนวน items ที่โหลดแล้ว + พื้นที่สำหรับ loading indicator
-			local loadedItems = Dropdown.LoadedItems
-			local totalItems = #Dropdown.Values
-			local itemHeight = 36 -- เพิ่มขนาด item
-			local itemPadding = 4
-			
-			-- ขนาดของ items ที่โหลดแล้ว
-			local loadedHeight = loadedItems * itemHeight + math.max(0, loadedItems - 1) * itemPadding
-			
-			-- เพิ่มพื้นที่สำหรับ loading indicator ถ้ายังโหลดไม่หมด
-			if loadedItems < totalItems then
-				loadedHeight = loadedHeight + 45 -- พื้นที่สำหรับ loading indicator + trigger zone
+			-- Dung kich thuoc THAT tu UIListLayout (item 34px + padding 10px)
+			-- thay vi uoc luong 36/4 -> truoc day canvas nho hon noi dung that,
+			-- lam khong the cuon xuong xem item thu 6+ duoc
+			local contentHeight = DropdownListLayout.AbsoluteContentSize.Y
+
+			-- Them cho cho loading indicator neu con item chua load
+			if Dropdown.LoadedItems < #Dropdown.Values then
+				contentHeight = contentHeight + 45
 			end
-			
-			DropdownScrollFrame.CanvasSize = UDim2.fromOffset(0, loadedHeight)
+
+			DropdownScrollFrame.CanvasSize = UDim2.fromOffset(0, contentHeight + 10)
 		end
+
+		-- Cap nhat canvas moi khi noi dung list thay doi (load them batch, filter...)
+		Creator.AddSignal(DropdownListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), RecalculateCanvasSize)
 
 		RecalculateListPosition()
 		RecalculateListSize()
