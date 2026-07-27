@@ -2307,8 +2307,11 @@ end
 Components.Section = function(Title, Parent)
 	local Section = {}
 
+	-- SortOrder phai la LayoutOrder: neu khong, cac TextButton trung ten se
+	-- xep theo thu tu child -> re-parent khi clear search lam xao tron
 	Section.Layout = New("UIListLayout", {
 		Padding = UDim.new(0, 5),
+		SortOrder = Enum.SortOrder.LayoutOrder,
 	})
 
 	Section.Container = New("Frame", {
