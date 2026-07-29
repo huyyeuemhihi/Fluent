@@ -2145,6 +2145,47 @@ local function NextLayoutOrder()
 	return ElementLayoutOrder
 end
 
+-- "Nha" goc cua tung element/section: parent va layout order ngay luc tao.
+-- Search se di chuyen element sang khung ket qua; khi xoa search ta tra ve
+-- dua tren bang nay nen thu tu LUON dung, khong phu thuoc vao danh sach tam
+-- (danh sach tam co the bi lech neu search doi lien tuc / doi tab giua chung).
+-- KHONG dung weak table: neu Lua GC don key thi mat "nha" -> element ve sai cho.
+-- Entry duoc xoa thu cong trong Element:Destroy.
+local ElementHomes = {}
+
+local function RememberHome(Object, Parent, Order)
+	if not Object then
+		return
+	end
+	ElementHomes[Object] = { Parent = Parent, LayoutOrder = Order }
+end
+
+local function ForgetHome(Object)
+	if Object then
+		ElementHomes[Object] = nil
+	end
+end
+
+local function RestoreHome(Object)
+	local Home = ElementHomes[Object]
+	if not Home then
+		return false
+	end
+
+	local HomeParent = Home.Parent
+	if not HomeParent or not HomeParent:IsDescendantOf(game) then
+		return false
+	end
+
+	Object.LayoutOrder = Home.LayoutOrder
+	if Object.Parent ~= HomeParent then
+		Object.Parent = HomeParent
+	end
+	-- set lai lan nua sau khi doi parent de chac chan layout dung
+	Object.LayoutOrder = Home.LayoutOrder
+	return true
+end
+
 Components.Element = function(Title, Desc, Parent, Hover, Options)
 	local Element = { Original = { Text = "" } }
 	local Options = Options or {}
@@ -2209,6 +2250,8 @@ Components.Element = function(Title, Desc, Parent, Hover, Options)
 		},
 	})
 
+	local ElementOrder = NextLayoutOrder()
+
 	Element.Frame = New("TextButton", {
 		Visible = Options.Visible and Options.Visible or true,
 		Size = UDim2.new(1, 0, 0, 0),
@@ -2217,7 +2260,7 @@ Components.Element = function(Title, Desc, Parent, Hover, Options)
 		Parent = Parent,
 		AutomaticSize = Enum.AutomaticSize.Y,
 		Text = "",
-		LayoutOrder = NextLayoutOrder(),
+		LayoutOrder = ElementOrder,
 		ThemeTag = {
 			BackgroundColor3 = "Element",
 			BackgroundTransparency = "ElementTransparency",
@@ -2229,6 +2272,8 @@ Components.Element = function(Title, Desc, Parent, Hover, Options)
 		Element.Border,
 		Element.LabelHolder,
 	})
+
+	RememberHome(Element.Frame, Parent, ElementOrder)
 
 	function Element:SetTitle(Set)
 		Element.TitleLabel.Text = Set
@@ -2269,6 +2314,7 @@ Components.Element = function(Title, Desc, Parent, Hover, Options)
 	end
 
 	function Element:Destroy()
+		ForgetHome(Element.Frame)
 		Element.Frame:Destroy()
 	end
 
@@ -2322,10 +2368,12 @@ Components.Section = function(Title, Parent)
 		Section.Layout,
 	})
 
+	local SectionOrder = NextLayoutOrder()
+
 	Section.Root = New("Frame", {
 		BackgroundTransparency = 1,
 		Size = UDim2.new(1, 0, 0, 26),
-		LayoutOrder = NextLayoutOrder(),
+		LayoutOrder = SectionOrder,
 		Parent = Parent,
 	}, {
 		New("TextLabel", {
@@ -2345,6 +2393,8 @@ Components.Section = function(Title, Parent)
 		}),
 		Section.Container,
 	})
+
+	RememberHome(Section.Root, Parent, SectionOrder)
 
 	Creator.AddSignal(Section.Layout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
 		Section.Container.Size = UDim2.new(1, 0, 0, Section.Layout.AbsoluteContentSize.Y)
@@ -3606,7 +3656,8 @@ Components.Window = (function()
 			SearchResults.CanvasSize = UDim2.new(0, 0, 0, SearchLayout.AbsoluteContentSize.Y + 2)
 		end)
 
-		local MovedElements = {} -- { {Element, Parent, LayoutOrder}, ... }
+		-- Danh sach element dang bi "muon" sang khung ket qua
+		local MovedElements = {}
 
 		local function ElementMatches(frame, q)
 			for _, d in ipairs(frame:GetDescendants()) do
@@ -3617,13 +3668,25 @@ Components.Window = (function()
 			return false
 		end
 
-		-- tra cac element da di chuyen ve dung tab/section cu
+		-- Tra cac element ve dung tab/section cu.
+		-- Dung ElementHomes (ghi luc tao) thay vi parent tam thoi -> khong bao gio
+		-- bi xao tron du search nhieu lan hay doi tab giua chung.
 		local function RestoreElements()
-			for _, info in ipairs(MovedElements) do
-				info.Element.LayoutOrder = info.LayoutOrder
-				info.Element.Parent = info.Parent
-			end
+			local Moved = MovedElements
 			MovedElements = {}
+
+			for _, Element in ipairs(Moved) do
+				if Element and Element.Parent then
+					RestoreHome(Element)
+				end
+			end
+
+			-- quet them: bat ky element nao con sot lai trong khung ket qua
+			for _, Child in ipairs(SearchResults:GetChildren()) do
+				if Child:IsA("TextButton") then
+					RestoreHome(Child)
+				end
+			end
 		end
 
 		-- tim element khop trong container (ke ca trong Section) va don vao SearchResults
@@ -3631,11 +3694,12 @@ Components.Window = (function()
 			for _, child in ipairs(container:GetChildren()) do
 				if child:IsA("TextButton") then
 					if ElementMatches(child, q) then
-						table.insert(MovedElements, {
-							Element = child,
-							Parent = child.Parent,
-							LayoutOrder = child.LayoutOrder,
-						})
+						-- dam bao co "nha" de tra ve (element tao truoc ban va nay)
+						if not ElementHomes[child] then
+							RememberHome(child, child.Parent, child.LayoutOrder)
+						end
+
+						table.insert(MovedElements, child)
 						child.LayoutOrder = order.n
 						order.n = order.n + 1
 						child.Parent = SearchResults
@@ -3649,7 +3713,10 @@ Components.Window = (function()
 		-- dung de xoa search khi nguoi dung bam sang tab khac
 		Window.ClearSearch = function()
 			if SearchInput.Text ~= "" then
-				SearchInput.Text = ""
+				SearchInput.Text = "" -- kich hoat handler ben duoi -> tu restore
+			else
+				RestoreElements()
+				SearchResults.Visible = false
 			end
 		end
 
