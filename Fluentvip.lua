@@ -36,7 +36,7 @@ local Themes = {
 		"CottonCandy",
 		"BlackGlass",
 		"RoyalGold",
-		"Emeral"
+		"Emerald"
 	},
 	["VSC Dark High Contrast"] = {
 		Accent = Color3.fromHex("#569cd6"), -- Based on keyword color
