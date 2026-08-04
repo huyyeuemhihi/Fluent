@@ -842,55 +842,56 @@ local Themes = {
 	DeepOcean = {
 		Name = "DeepOcean",
 	
-		Accent = Color3.fromRGB(0,136,204),
+		Accent = Color3.fromRGB(0,170,255),
 	
-		AcrylicMain = Color3.fromRGB(6,12,24),
-		AcrylicBorder = Color3.fromRGB(12,24,40),
+		AcrylicMain = Color3.fromRGB(10,18,34),
+		AcrylicBorder = Color3.fromRGB(18,36,60),
 		AcrylicGradient = ColorSequence.new(
-			Color3.fromRGB(6,12,24),
-			Color3.fromRGB(5,5,5)
+			Color3.fromRGB(10,18,34),
+			Color3.fromRGB(8,12,20)
 		),
 		AcrylicNoise = 0.8,
 	
-		TitleBarLine = Color3.fromRGB(12,24,40),
-		Tab = Color3.fromRGB(8,14,32),
+		TitleBarLine = Color3.fromRGB(20,40,68),
+		Tab = Color3.fromRGB(12,22,40),
 	
-		Element = Color3.fromRGB(7,12,28),
-		ElementBorder = Color3.fromRGB(12,24,40),
-		InElementBorder = Color3.fromRGB(40,40,40),
-		ElementTransparency = 0.85,
+		Element = Color3.fromRGB(12,20,38),
+		ElementBorder = Color3.fromRGB(20,40,68),
+		InElementBorder = Color3.fromRGB(70,85,110),
+		ElementTransparency = 0.82,
 	
-		ToggleSlider = Color3.fromRGB(12,24,40),
-		ToggleToggled = Color3.fromRGB(0,136,204),
+		ToggleSlider = Color3.fromRGB(20,40,68),
+		ToggleToggled = Color3.fromRGB(0,170,255),
 	
-		SliderRail = Color3.fromRGB(12,24,40),
+		SliderRail = Color3.fromRGB(20,40,68),
 	
-		DropdownFrame = Color3.fromRGB(6,12,24),
-		DropdownHolder = Color3.fromRGB(6,12,24),
-		DropdownBorder = Color3.fromRGB(12,24,40),
-		DropdownOption = Color3.fromRGB(7,12,28),
+		DropdownFrame = Color3.fromRGB(10,18,34),
+		DropdownHolder = Color3.fromRGB(10,18,34),
+		DropdownBorder = Color3.fromRGB(20,40,68),
+		DropdownOption = Color3.fromRGB(12,20,38),
 	
-		Keybind = Color3.fromRGB(6,12,24),
+		Keybind = Color3.fromRGB(10,18,34),
 	
-		Input = Color3.fromRGB(6,12,24),
-		InputFocused = Color3.fromRGB(10,18,30),
-		InputIndicator = Color3.fromRGB(12,24,40),
-		InputIndicatorFocus = Color3.fromRGB(0,136,204),
+		Input = Color3.fromRGB(10,18,34),
+		InputFocused = Color3.fromRGB(16,28,46),
+		InputIndicator = Color3.fromRGB(20,40,68),
+		InputIndicatorFocus = Color3.fromRGB(0,170,255),
 	
-		Dialog = Color3.fromRGB(6,12,24),
-		DialogHolder = Color3.fromRGB(6,12,24),
-		DialogHolderLine = Color3.fromRGB(12,24,40),
-		DialogButton = Color3.fromRGB(7,12,28),
-		DialogButtonBorder = Color3.fromRGB(12,24,40),
-		DialogBorder = Color3.fromRGB(12,24,40),
-		DialogInput = Color3.fromRGB(6,12,24),
-		DialogInputLine = Color3.fromRGB(0,136,204),
+		Dialog = Color3.fromRGB(10,18,34),
+		DialogHolder = Color3.fromRGB(10,18,34),
+		DialogHolderLine = Color3.fromRGB(20,40,68),
+		DialogButton = Color3.fromRGB(12,20,38),
+		DialogButtonBorder = Color3.fromRGB(20,40,68),
+		DialogBorder = Color3.fromRGB(20,40,68),
+		DialogInput = Color3.fromRGB(10,18,34),
+		DialogInputLine = Color3.fromRGB(0,170,255),
 	
-		Text = Color3.fromRGB(192,224,255),
-		SubText = Color3.fromRGB(64,80,112),
+		-- Chữ sáng hơn
+		Text = Color3.fromRGB(245,250,255),
+		SubText = Color3.fromRGB(175,205,235),
 	
-		Hover = Color3.fromRGB(12,20,37),
-		HoverChange = 0.07,
+		Hover = Color3.fromRGB(20,34,56),
+		HoverChange = 0.1,
 	},
 	Orange = {
 		Name = "Orange",
